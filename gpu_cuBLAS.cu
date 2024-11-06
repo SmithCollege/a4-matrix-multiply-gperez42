@@ -9,7 +9,7 @@
 #include <cuda_runtime.h>
 #include <sys/time.h>
 
-#define SIZE 128
+#define SIZE 50
 
 // Resources Used: https://www.javatpoint.com/how-to-add-matrix-in-c
 

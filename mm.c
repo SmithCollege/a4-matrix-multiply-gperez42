@@ -31,7 +31,7 @@ double get_clock() {
 }
 
 int main() {
-	int size = 128;
+	int size = 50;
 
 	double t0 = get_clock();
 

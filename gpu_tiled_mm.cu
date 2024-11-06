@@ -4,27 +4,11 @@
 #include <cuda.h>
 #include <sys/time.h>
 
-#define SIZE 128
+#define SIZE 50
 #define TILE_WIDTH 2
 
 // Resources Used: https://www.javatpoint.com/how-to-add-matrix-in-c
 
-/*
-__global__ void MatrixMulOnDevice(float* A, float* B, float* C, int Width) {
-	 for (int i = 0; i < Width; ++i){
-		 for (int j = 0; j < Width; ++j) {
-			 float sum = 0;
-			 for (int k = 0; k < Width; ++k) {
-				 float a = A[i * Width + k];
-				 float b = B[k * Width + j];
-				 sum += a * b;
-			 }
-		 C[i * Width + j] = sum;
-
-		 }
-	 }
-}
-*/
 __global__ void MatrixMulKernel(float* M, float* N, float* P, int Width) {
 
 	__shared__ float subTileM[TILE_WIDTH][TILE_WIDTH];
