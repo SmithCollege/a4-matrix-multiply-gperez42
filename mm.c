@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <sys/time.h>
+
 
 // Resources Used: https://www.javatpoint.com/how-to-add-matrix-in-c
 
@@ -19,8 +21,20 @@ void MatrixMulOnHost(float* A, float* B, float* C, int Width) {
 	 }
 }
 
+double get_clock() {
+  struct timeval tv; 
+  int ok = gettimeofday(&tv, (void *) 0);
+  if (ok<0) { 
+  	printf("gettimeofday error"); 
+  }
+  return (tv.tv_sec * 1.0 + tv.tv_usec * 1.0E-6);
+}
+
 int main() {
-	int size = 1000;
+	int size = 128;
+
+	double t0 = get_clock();
+
 	
 	float* x = malloc(sizeof(float) * size * size);
 	float* y = malloc(sizeof(float) * size * size);
@@ -33,7 +47,7 @@ int main() {
     	}
   	}
 
-  	 MatrixMulOnHost(x, y, z, size);
+  	MatrixMulOnHost(x, y, z, size);
   	// printf("%d", MatrixMulOnHost(x, y, z, size));
 
   for (int i = 0; i < size; i++) {
@@ -46,5 +60,12 @@ int main() {
     printf("\n");
   }
 
-  return 0;
+   double t1 = get_clock();
+   printf("time per call: %f s\n", t1-t0);
+
+	free(x);
+	free(y);
+	free(z);
+	
+  	return 0;
 }

@@ -7,10 +7,20 @@
 
 // CUDA runtime
 #include <cuda_runtime.h>
+#include <sys/time.h>
 
 #define SIZE 128
 
 // Resources Used: https://www.javatpoint.com/how-to-add-matrix-in-c
+
+double get_clock() {
+  struct timeval tv; 
+  int ok = gettimeofday(&tv, (void *) 0);
+  if (ok<0) { 
+  	printf("gettimeofday error"); 
+  }
+  return (tv.tv_sec * 1.0 + tv.tv_usec * 1.0E-6);
+}
 
 int main() {
 	 printf("[Matrix Multiply CUBLAS] - Starting...\n");
@@ -22,8 +32,10 @@ int main() {
 	const float beta = 0.0f;
        
 	int size = 100;
-
 	float *x, *y, *z;
+
+	double t0 = get_clock();
+
 	cudaMallocManaged(&x, SIZE*sizeof(float) * size * size);
 	cudaMallocManaged(&y, SIZE*sizeof(float) * size * size);
 	cudaMallocManaged(&z, SIZE*sizeof(float) * size * size);
@@ -54,6 +66,10 @@ int main() {
     }
     printf("\n");
   }
+
+  double t1 = get_clock();
+  printf("time per call: %f ns\n", t1-t0);
+
 
   	// Freeing memory
 	cudaFree(x);

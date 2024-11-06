@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <cuda.h>
+#include <sys/time.h>
 
 #define SIZE 128
 #define TILE_WIDTH 2
@@ -23,10 +24,21 @@ __global__ void MatrixMulOnDevice(float* A, float* B, float* C, int Width) {
 	 }
 }
 
+double get_clock() {
+  struct timeval tv; 
+  int ok = gettimeofday(&tv, (void *) 0);
+  if (ok<0) { 
+  	printf("gettimeofday error"); 
+  }
+  return (tv.tv_sec * 1.0 + tv.tv_usec * 1.0E-6);
+}
+
 int main() {
 	int size = 100;
-
 	float *x, *y, *z;
+
+	double t0 = get_clock();
+
 	cudaMallocManaged(&x, SIZE*sizeof(float) * size * size);
 	cudaMallocManaged(&y, SIZE*sizeof(float) * size * size);
 	cudaMallocManaged(&z, SIZE*sizeof(float) * size * size);
@@ -56,6 +68,9 @@ int main() {
     }
     printf("\n");
   }
+
+   double t1 = get_clock();
+    printf("time per call: %f s\n", t1-t0);
 
   	// Freeing memory
 	cudaFree(x);
